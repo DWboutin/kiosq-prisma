@@ -4,9 +4,9 @@ if [[ -z "${DISABLE_SAFE_COMMIT}" ]]; then
   normal=$(tput sgr0)
   green=$(tput setaf 2)
 
-  read -p "${bold}${green}Do you want to run your tests (y/N)?${normal}" CONT
+  read -p "${bold}${green}Do you want to run prettier (y/N)?${normal}" CONT
   if [ "$CONT" = "y" ]; then
-    npm run test
+    npm run format
   else
     echo "keep going";
   fi
