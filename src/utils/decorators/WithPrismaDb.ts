@@ -1,3 +1,5 @@
+import { PrismaDBException } from '/exceptions/PrismaDBException'
+
 export function WithPrismaDB(target: any) {
   const originalMethods = Object.getOwnPropertyNames(target.prototype)
 
@@ -9,8 +11,7 @@ export function WithPrismaDB(target: any) {
         const result = await originalMethod.apply(this, args)
         return result
       } catch (err: any) {
-        console.error(err)
-        process.exit(1)
+        throw new PrismaDBException(err)
       } finally {
         await await this.prisma.$disconnect()
       }

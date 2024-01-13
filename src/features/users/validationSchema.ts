@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const passwordRegexp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/
+const passwordRegexp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&-_])[A-Za-z\d@$!%*?&-_]+$/
 
 const passwordRegexpError =
   'Password should contain at least one letter, one number and one special character and have a minimum length of 12 characters'
