@@ -1,19 +1,24 @@
-import express, { NextFunction, Request, Response } from 'express'
+import express from 'express'
 import compression from 'compression'
+import passport from 'passport'
 import { router } from '/router'
+import { errorHandling } from '/middlewares/errorHandling'
+import { passportJwtStrategy } from '/middlewares/passportJwtStrategy'
 
 export const app = express()
+
+passportJwtStrategy(passport)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(compression())
+app.use(passport.initialize())
 
 app.use(router)
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(500).json({
-    message: err.message,
-    ...err,
-  })
-  return next()
+// to test the jwt token strategy
+app.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.send('You have accessed a protected route!')
 })
+
+app.use(errorHandling)
