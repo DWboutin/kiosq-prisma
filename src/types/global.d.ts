@@ -8,7 +8,7 @@ declare namespace NodeJS {
 interface IRepository {
   create: (data: any) => Promise<any>
   findAll: () => Promise<any>
-  findById: (id: number) => Promise<any | null>
-  update: (id: number, data: any) => Promise<any>
-  delete: (id: number) => Promise<any>
+  findById: (id: string) => Promise<any | null>
+  update: (id: string, data: any) => Promise<any>
+  delete: (id: string) => Promise<any>
 }
