@@ -1,5 +1,5 @@
 type User = {
-  id: number
+  id: string
   createdAt: Date
   updatedAt: Date
 } & UserData

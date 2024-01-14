@@ -3,7 +3,6 @@ import { WithExpressErrorHandling } from '/utils/decorators/WithExpressErrorHand
 import { ZodValidator } from '/utils/ZodValidator'
 import { userCreationSchema } from '/features/users/validationSchema'
 import { UserRepository } from '/features/users/Repository'
-import { GuardAgainstWrongId } from '/guards/GuardAgainstWrongId'
 import { JwtTokenManager } from '/utils/JwtTokenManager'
 import { Encrypter } from '/utils/Crypter'
 import { UserFactory } from '/features/users/Factory'
@@ -39,9 +38,7 @@ export class UserController {
 
   @WithExpressErrorHandling
   static async findById(req: Request, res: Response, next: NextFunction) {
-    const id = parseInt(req.params.id)
-
-    GuardAgainstWrongId.guard(id)
+    const id = req.params.id
 
     const userRepository = new UserRepository()
     const rawUser = await userRepository.findById(id)

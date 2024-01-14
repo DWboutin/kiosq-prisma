@@ -23,7 +23,7 @@ export class UserRepository implements IRepository {
     return await this.prisma.user.findMany()
   }
 
-  async findById(id: number) {
+  async findById(id: string) {
     return await this.prisma.user.findUnique({
       where: {
         id,
@@ -31,7 +31,7 @@ export class UserRepository implements IRepository {
     })
   }
 
-  async update(id: number, data: Partial<UserData>) {
+  async update(id: string, data: Partial<UserData>) {
     return await this.prisma.user.update({
       where: {
         id,
@@ -40,7 +40,7 @@ export class UserRepository implements IRepository {
     })
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     return await this.prisma.user.delete({
       where: {
         id,
