@@ -18,6 +18,7 @@ app.use(router)
 
 // to test the jwt token strategy
 app.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
+  console.log('from protected -> ', { user: req.user })
   res.send('You have accessed a protected route!')
 })
 

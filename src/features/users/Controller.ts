@@ -61,15 +61,13 @@ export class UserController {
 
   @WithExpressErrorHandling
   static async update(req: Request, res: Response) {
-    const id = parseInt(req.params.id)
-
-    GuardAgainstWrongId.guard(id)
+    const authenticatedUser = req.user as User
 
     const validator = new ZodValidator(userCreationSchema.partial())
     validator.validate(req.body)
 
     const userRepository = new UserRepository()
-    const rawUser = await userRepository.update(id, req.body)
+    const rawUser = await userRepository.update(authenticatedUser.id, req.body)
     const user = UserFactory.create(rawUser)
 
     res.status(200).json({ user })
@@ -79,12 +77,10 @@ export class UserController {
 
   @WithExpressErrorHandling
   static async delete(req: Request, res: Response) {
-    const id = parseInt(req.params.id)
-
-    GuardAgainstWrongId.guard(id)
+    const authenticatedUser = req.user as User
 
     const userRepository = new UserRepository()
-    await userRepository.delete(id)
+    await userRepository.delete(authenticatedUser.id)
 
     res.status(204).send()
 

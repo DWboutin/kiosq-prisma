@@ -15,8 +15,6 @@ export const passportJwtStrategy = (passport: PassportStatic) => {
       const userRepository = new UserRepository()
       const user = await userRepository.findById(jwtPayload.id)
 
-      console.log({ user })
-
       if (user) {
         return done(null, user)
       }
