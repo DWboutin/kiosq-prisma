@@ -5,6 +5,8 @@ import { userCreationSchema } from '/features/users/validationSchema'
 import { UserRepository } from '/features/users/Repository'
 import { GuardAgainstWrongId } from '/guards/GuardAgainstWrongId'
 import { JwtTokenManager } from '/utils/JwtTokenManager'
+import { Encrypter } from '/utils/Crypter'
+import { UserFactory } from '/features/users/Factory'
 
 export class UserController {
   @WithExpressErrorHandling
@@ -13,9 +15,11 @@ export class UserController {
     validator.validate(req.body)
 
     const { name, email, password } = req.body
+    const passwordHash = await Encrypter.hash(password)
 
     const userRepository = new UserRepository()
-    const user = await userRepository.create({ name, email, password })
+    const rawUser = await userRepository.create({ name, email, password: passwordHash })
+    const user = UserFactory.create(rawUser)
 
     res.status(201).json({ user })
 
@@ -25,7 +29,8 @@ export class UserController {
   @WithExpressErrorHandling
   static async findAll(req: Request, res: Response) {
     const userRepository = new UserRepository()
-    const users = await userRepository.findAll()
+    const rawUsers = await userRepository.findAll()
+    const users = rawUsers.map((rawUser) => UserFactory.create(rawUser))
 
     res.status(200).json({ users })
 
@@ -39,7 +44,15 @@ export class UserController {
     GuardAgainstWrongId.guard(id)
 
     const userRepository = new UserRepository()
-    const user = await userRepository.findById(id)
+    const rawUser = await userRepository.findById(id)
+
+    if (!rawUser) {
+      res.status(404).json({ message: 'User not found' })
+
+      return
+    }
+
+    const user = UserFactory.create(rawUser)
 
     res.status(200).json({ user })
 
@@ -56,7 +69,8 @@ export class UserController {
     validator.validate(req.body)
 
     const userRepository = new UserRepository()
-    const user = await userRepository.update(id, req.body)
+    const rawUser = await userRepository.update(id, req.body)
+    const user = UserFactory.create(rawUser)
 
     res.status(200).json({ user })
 
@@ -85,7 +99,7 @@ export class UserController {
     const { email, password } = req.body
 
     const userRepository = new UserRepository()
-    const user = await userRepository.findByCredentials(email, password)
+    const user = await userRepository.findByEmail(email)
 
     if (!user) {
       res.status(404).json({ message: 'User not found' })
@@ -93,7 +107,15 @@ export class UserController {
       return
     }
 
-    const token = await JwtTokenManager.generate({ username: user.email, password: user.password })
+    const passwordMatch = await Encrypter.compare(password, user.password)
+
+    if (!passwordMatch) {
+      res.status(404).json({ message: 'User not found' })
+
+      return
+    }
+
+    const token = await JwtTokenManager.generate({ id: user.id, email: user.email })
 
     res.status(200).json({ token })
 

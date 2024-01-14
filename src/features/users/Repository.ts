@@ -48,11 +48,10 @@ export class UserRepository implements IRepository {
     })
   }
 
-  async findByCredentials(email: string, password: string) {
+  async findByEmail(email: string) {
     return await this.prisma.user.findUnique({
       where: {
         email,
-        password,
       },
     })
   }
