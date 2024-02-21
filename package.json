@@ -8,6 +8,8 @@
     "test": "echo \"Error: no test specified\"",
     "format": "prettier --write \"src/**/*.ts\"",
     "db-reset": "npx prisma db push --force-reset && npx prisma db seed",
+    "ngrok": "ngrok http --domain=uncommon-alien-concise.ngrok-free.app 8000",
+    "studio": "npx prisma studio",
     "prepare": "husky install"
   },
   "author": "",
