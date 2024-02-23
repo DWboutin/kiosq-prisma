@@ -16,6 +16,10 @@ app.use(passport.initialize())
 
 app.use(router)
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
 // to test the jwt token strategy
 app.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log('from protected -> ', { user: req.user })
