@@ -95,7 +95,7 @@ export class UserController {
     const user = await userRepository.findByEmail(email)
 
     if (!user) {
-      res.status(404).json({ message: 'User not found' })
+      res.status(404).json({ error: { code: 'no_user', message: 'User not found' } })
 
       return
     }
@@ -103,7 +103,7 @@ export class UserController {
     const passwordMatch = await Encrypter.compare(password, user.password)
 
     if (!passwordMatch) {
-      res.status(404).json({ message: 'User not found' })
+      res.status(404).json({ error: { code: 'no_user', message: 'User not found' } })
 
       return
     }

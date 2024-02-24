@@ -5,7 +5,7 @@ export class PrismaDBException extends Error {
     super(message)
 
     if (error.code === 'P2002') {
-      message = 'There is a unique constraint violation'
+      message = `A ${error.meta.modelName} with the same ${error.meta.target} already exists`
     }
 
     this.message = message
