@@ -12,3 +12,9 @@ interface IRepository {
   update: (id: string, data: any) => Promise<any>
   delete: (id: string) => Promise<any>
 }
+
+type DbEntity = {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+}

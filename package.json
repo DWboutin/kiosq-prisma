@@ -49,5 +49,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "prisma": {
+    "seed": "ts-node ./prisma/seed/seed.ts"
   }
 }
