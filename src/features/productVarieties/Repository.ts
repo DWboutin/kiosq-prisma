@@ -52,4 +52,12 @@ export class ProductVarietiesRepository implements IRepository {
       },
     })
   }
+
+  async findByTypeId(typeId: number) {
+    return await this.prisma.productVariety.findMany({
+      where: {
+        typeId,
+      },
+    })
+  }
 }

@@ -50,4 +50,12 @@ export class ProductTypesRepository implements IRepository {
       },
     })
   }
+
+  async findByCategoryId(categoryId: number) {
+    return await this.prisma.productType.findMany({
+      where: {
+        categoryId,
+      },
+    })
+  }
 }
