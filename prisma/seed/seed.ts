@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { productCategories } from './productCategories'
 import { productTypes } from './productTypes'
 import { productVarieties } from './productVarieties'
+import { productSizes } from './productSizes'
 
 const prisma = new PrismaClient()
 
@@ -41,6 +42,14 @@ async function seed() {
     })
 
     await Promise.all(typesPromises)
+  }
+
+  for (const size of productSizes) {
+    await prisma.productSize.create({
+      data: {
+        name: size,
+      },
+    })
   }
 }
 
