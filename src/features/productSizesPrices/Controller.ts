@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { WithExpressErrorHandling } from '/utils/decorators/WithExpressErrorHandling'
-import { ProductSizes } from '/features/productSizes/Repository'
-import { ProductSizesPrices } from '/features/productSizesPrices/Repository'
+import { ProductSizesPricesRepository } from '/features/productSizesPrices/Repository'
 import { ZodValidator } from '/utils/ZodValidator'
 import { productSizesPricesCreationSchema } from '/features/productSizesPrices/validationSchema'
 
@@ -11,7 +10,7 @@ export class ProductSizesPricesController {
     const validator = new ZodValidator(productSizesPricesCreationSchema)
     validator.validate(req.body)
 
-    const productSizesPrices = new ProductSizesPrices()
+    const productSizesPrices = new ProductSizesPricesRepository()
     const rawProductSizesPrices = await productSizesPrices.create({
       productId: req.body.productId,
       sizeId: req.body.sizeId,
@@ -25,7 +24,7 @@ export class ProductSizesPricesController {
   }
   @WithExpressErrorHandling
   static async findAll(req: Request, res: Response) {
-    const productSizesPricesRepository = new ProductSizesPrices()
+    const productSizesPricesRepository = new ProductSizesPricesRepository()
     const rawProductSizesPrices = await productSizesPricesRepository.findAll()
 
     res.status(200).json({ productSizesPrices: rawProductSizesPrices })

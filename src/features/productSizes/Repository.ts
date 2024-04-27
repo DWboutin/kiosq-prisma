@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { WithPrismaDB } from '/utils/decorators/WithPrismaDb'
 
 @WithPrismaDB
-export class ProductSizes implements IRepository {
+export class ProductSizesRepository implements IRepository {
   private prisma: PrismaClient
 
   constructor() {

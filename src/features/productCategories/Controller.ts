@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { WithExpressErrorHandling } from '/utils/decorators/WithExpressErrorHandling'
-import { ProductCategories } from '/features/productCategories/Repository'
+import { ProductCategoriesRepository } from '/features/productCategories/Repository'
 
 export class ProductCategoriesController {
   @WithExpressErrorHandling
@@ -12,7 +12,7 @@ export class ProductCategoriesController {
 
   @WithExpressErrorHandling
   static async findAll(req: Request, res: Response) {
-    const productCategoriesRepository = new ProductCategories()
+    const productCategoriesRepository = new ProductCategoriesRepository()
     const rawProductCategories = await productCategoriesRepository.findAll()
 
     res.status(200).json({ productCategories: rawProductCategories })
