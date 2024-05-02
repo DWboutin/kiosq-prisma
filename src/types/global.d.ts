@@ -15,7 +15,7 @@ interface IRepository {
 
 interface IRepositoryWithMultiplePrimaryKeys {
   create: (data: any) => Promise<any>
-  findAll: () => Promise<any>
+  findAll: (obj: ProductSizeUniqueContraint) => Promise<any | null>
   findUnique: (obj: ProductSizeUniqueContraint) => Promise<any | null>
   update: (data: any) => Promise<any>
   delete: (obj: ProductSizeUniqueContraint) => Promise<any>

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import { WithExpressErrorHandling } from '/utils/decorators/WithExpressErrorHandling'
 import { ZodValidator } from '/utils/ZodValidator'
-import { productCreationSchema } from '/features/products/validationSchema'
+import { productCreationSchema, productUpdateSchema } from '/features/products/validationSchema'
 import { ProductsRepository } from '/features/products/Repository'
+import { ProductSizesPricesRepository } from '/features/productSizesPrices/Repository'
 
 export class ProductsController {
   @WithExpressErrorHandling
@@ -10,8 +11,17 @@ export class ProductsController {
     const validator = new ZodValidator(productCreationSchema)
     validator.validate(req.body)
 
-    const { name, categoryId, typeId, varietyId, startPeriod, startMonth, endPeriod, endMonth } =
-      req.body
+    const {
+      name,
+      categoryId,
+      typeId,
+      varietyId,
+      startPeriod,
+      startMonth,
+      endPeriod,
+      endMonth,
+      sizesAndPrices,
+    } = req.body
     const productsRepository = new ProductsRepository()
     const product = await productsRepository.create({
       name,
@@ -23,36 +33,81 @@ export class ProductsController {
       endPeriod,
       endMonth,
     })
+    const productSizesPricesRepository = new ProductSizesPricesRepository()
+    const productSizesPrices = await Promise.all(
+      sizesAndPrices.map((sizesAndPrice: ProductSizePriceData) =>
+        productSizesPricesRepository.create({
+          ...sizesAndPrice,
+          productId: product.id,
+        }),
+      ),
+    )
 
-    res.status(201).json({ product })
+    res.status(201).json({
+      product: {
+        ...product,
+        productSizePrice: productSizesPrices,
+      },
+    })
 
     return
   }
 
   @WithExpressErrorHandling
   static async findAll(req: Request, res: Response) {
-    res.status(401).json({ message: 'Not implemented' })
+    const productsRepository = new ProductsRepository()
+    const products = await productsRepository.findAll()
+
+    res.status(200).json({ products })
 
     return
   }
 
   @WithExpressErrorHandling
   static async findById(req: Request, res: Response) {
-    res.status(401).json({ message: 'Not implemented' })
+    const productId = parseInt(req.params.id)
+
+    const productsRepository = new ProductsRepository()
+    const product = await productsRepository.findById(productId)
+
+    if (!product) {
+      res.status(404).json({ product: null })
+
+      return
+    }
+
+    res.status(200).json({ product })
 
     return
   }
 
   @WithExpressErrorHandling
   static async update(req: Request, res: Response) {
-    res.status(401).json({ message: 'Not implemented' })
+    const validator = new ZodValidator(productUpdateSchema)
+    validator.validate(req.body)
+
+    if (req.body.sizesAndPrices) {
+      delete req.body.sizesAndPrices
+    }
+
+    const productId = parseInt(req.params.id)
+
+    const productsRepository = new ProductsRepository()
+    const product = await productsRepository.update(productId, req.body)
+
+    res.status(200).json({ product })
 
     return
   }
 
   @WithExpressErrorHandling
   static async delete(req: Request, res: Response) {
-    res.status(401).json({ message: 'Not implemented' })
+    const productId = parseInt(req.params.id)
+
+    const productsRepository = new ProductsRepository()
+    await productsRepository.delete(productId)
+
+    res.status(204).send()
 
     return
   }

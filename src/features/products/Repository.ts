@@ -21,11 +21,18 @@ export class ProductsRepository implements IRepository {
         endPeriod: data.endPeriod,
         endMonth: data.endMonth,
       },
+      include: {
+        productSizePrice: true,
+      },
     })
   }
 
   async findAll() {
-    return await this.prisma.product.findMany()
+    return await this.prisma.product.findMany({
+      include: {
+        productSizePrice: true,
+      },
+    })
   }
 
   async findById(id: number) {
@@ -33,15 +40,21 @@ export class ProductsRepository implements IRepository {
       where: {
         id,
       },
+      include: {
+        productSizePrice: true,
+      },
     })
   }
 
-  async update(id: number, data: Partial<ProductData>) {
+  async update(id: number, data: ProductData) {
     return await this.prisma.product.update({
       where: {
         id,
       },
       data,
+      include: {
+        productSizePrice: true,
+      },
     })
   }
 

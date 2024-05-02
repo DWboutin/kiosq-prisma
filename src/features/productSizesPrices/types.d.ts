@@ -1,11 +1,16 @@
 type ProductSizePrice = Omit<'id', DbEntity> & ProductSizePriceData
 
 type ProductSizePriceData = {
+  sizeId: number
   quantity: number
   price: number
-} & ProductSizeUniqueContraint
+}
 
-type ProductSizeUniqueContraint = {
+type ProductSizePriceDataWithProductId = ProductSizePriceData & {
+  productId: number
+}
+
+type ProductSizePriceUniqueContraint = {
   productId: number
   sizeId: number
 }

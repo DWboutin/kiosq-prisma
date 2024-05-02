@@ -9,7 +9,7 @@ export class ProductSizesPricesRepository implements IRepositoryWithMultiplePrim
     this.prisma = new PrismaClient()
   }
 
-  async create(data: ProductSizePriceData) {
+  async create(data: ProductSizePriceDataWithProductId) {
     return await this.prisma.productSizePrice.create({
       data: {
         productId: data.productId,
@@ -20,11 +20,13 @@ export class ProductSizesPricesRepository implements IRepositoryWithMultiplePrim
     })
   }
 
-  async findAll() {
-    return await this.prisma.productSizePrice.findMany()
+  async findAll(productId: number) {
+    return await this.prisma.productSizePrice.findMany({
+      where: { productId },
+    })
   }
 
-  async findUnique({ productId, sizeId }: ProductSizeUniqueContraint) {
+  async findUnique({ productId, sizeId }: ProductSizePriceUniqueContraint) {
     return await this.prisma.productSizePrice.findUnique({
       where: {
         productSizePrice: { productId, sizeId },
@@ -32,7 +34,7 @@ export class ProductSizesPricesRepository implements IRepositoryWithMultiplePrim
     })
   }
 
-  async update(data: ProductSizePriceData) {
+  async update(data: ProductSizePriceDataWithProductId) {
     return await this.prisma.productSizePrice.update({
       where: {
         productSizePrice: { productId: data.productId, sizeId: data.sizeId },
@@ -44,7 +46,7 @@ export class ProductSizesPricesRepository implements IRepositoryWithMultiplePrim
     })
   }
 
-  async delete({ productId, sizeId }: ProductSizeUniqueContraint) {
+  async delete({ productId, sizeId }: ProductSizePriceUniqueContraint) {
     return await this.prisma.productSizePrice.delete({
       where: {
         productSizePrice: { productId, sizeId },

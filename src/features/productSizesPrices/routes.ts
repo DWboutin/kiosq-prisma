@@ -3,7 +3,7 @@ import { ProductSizesPricesController } from '/features/productSizesPrices/Contr
 
 export const productSizesPricesRoutes = express.Router()
 
-productSizesPricesRoutes.post('/', ProductSizesPricesController.create)
-productSizesPricesRoutes.get('/', ProductSizesPricesController.findAll)
-productSizesPricesRoutes.put('/', ProductSizesPricesController.update)
-productSizesPricesRoutes.delete('/', ProductSizesPricesController.delete)
+productSizesPricesRoutes.post('/:productId', ProductSizesPricesController.create)
+productSizesPricesRoutes.get('/:productId', ProductSizesPricesController.findAll)
+productSizesPricesRoutes.put('/:productId/:sizeId', ProductSizesPricesController.update)
+productSizesPricesRoutes.delete('/:productId/:sizeId', ProductSizesPricesController.delete)

@@ -17,20 +17,21 @@ model User {
 }
 
 model Product {
-  id          Int             @id @default(autoincrement())
-  name        String
-  category    ProductCategory @relation(fields: [categoryId], references: [id])
-  categoryId  Int
-  type        ProductType     @relation(fields: [typeId], references: [id])
-  typeId      Int
-  variety     ProductVariety  @relation(fields: [varietyId], references: [id])
-  varietyId   Int
-  startPeriod String
-  startMonth  Int
-  endPeriod   String
-  endMonth    Int
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  id               Int                @id @default(autoincrement())
+  name             String
+  category         ProductCategory    @relation(fields: [categoryId], references: [id])
+  categoryId       Int
+  type             ProductType        @relation(fields: [typeId], references: [id])
+  typeId           Int
+  variety          ProductVariety     @relation(fields: [varietyId], references: [id])
+  varietyId        Int
+  startPeriod      String
+  startMonth       Int
+  endPeriod        String
+  endMonth         Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  productSizePrice ProductSizePrice[]
 
   @@index([categoryId])
 }
@@ -76,6 +77,7 @@ model ProductSize {
 }
 
 model ProductSizePrice {
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
   quantity  Int
   sizeId    Int
