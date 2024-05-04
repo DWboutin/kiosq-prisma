@@ -15,3 +15,75 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Product {
+  id               Int                @id @default(autoincrement())
+  name             String?
+  category         ProductCategory    @relation(fields: [categoryId], references: [id])
+  categoryId       Int
+  type             ProductType        @relation(fields: [typeId], references: [id])
+  typeId           Int
+  variety          ProductVariety     @relation(fields: [varietyId], references: [id])
+  varietyId        Int
+  startPeriod      String
+  startMonth       Int
+  endPeriod        String
+  endMonth         Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  productSizePrice ProductSizePrice[]
+
+  @@index([categoryId])
+}
+
+model ProductCategory {
+  id        Int              @id @default(autoincrement())
+  name      String           @unique
+  types     ProductType[]
+  products  Product[]
+  varieties ProductVariety[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+model ProductType {
+  id         Int              @id @default(autoincrement())
+  name       String
+  varieties  ProductVariety[]
+  products   Product[]
+  categoryId Int?
+  category   ProductCategory? @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+}
+
+model ProductVariety {
+  id         Int             @id @default(autoincrement())
+  name       String
+  categoryId Int
+  category   ProductCategory @relation(fields: [categoryId], references: [id])
+  typeId     Int?
+  type       ProductType?    @relation(fields: [typeId], references: [id])
+  products   Product[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+model ProductSize {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductSizePrice {
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  quantity  Int
+  sizeId    Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, sizeId], name: "productSizePrice")
+}

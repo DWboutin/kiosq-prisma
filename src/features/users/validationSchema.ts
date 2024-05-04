@@ -10,7 +10,11 @@ const nameValidator = z
   .min(2, { message: 'Minimum 2 characters' })
   .max(32, { message: 'Maximum 32 characters' })
 const emailValidator = z.string().min(1, { message: 'No input' }).email('Invalid email')
-const passwordValidator = z.string().min(12).max(32).regex(passwordRegexp, passwordRegexpError)
+const passwordValidator = z
+  .string()
+  .min(10, { message: 'Minimum 10 characters' })
+  .max(32, { message: 'Maximum 32 characters' })
+  .regex(passwordRegexp, passwordRegexpError)
 
 export const userCreationSchema = z.object({
   name: nameValidator,

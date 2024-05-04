@@ -1,8 +1,4 @@
-type User = {
-  id: string
-  createdAt: Date
-  updatedAt: Date
-} & UserData
+type User = DbEntity & UserData
 
 type UserData = {
   name: string

@@ -1,6 +1,7 @@
 import express from 'express'
-import { UserController } from './Controller'
 import passport from 'passport'
+
+import { UserController } from '/features/users/Controller'
 
 export const userRoutes = express.Router()
 

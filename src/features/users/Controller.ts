@@ -110,7 +110,7 @@ export class UserController {
 
     const token = await JwtTokenManager.generate({ id: user.id, email: user.email })
 
-    res.status(200).json({ token })
+    res.status(200).json({ id: user.id, token })
 
     return
   }
