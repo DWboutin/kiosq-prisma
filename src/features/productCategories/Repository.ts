@@ -1,12 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 import { WithPrismaDB } from '/utils/decorators/WithPrismaDb'
+import { prismaClient } from '/utils/PrismaORMClient'
 
 @WithPrismaDB
 export class ProductCategoriesRepository implements IRepository {
   private prisma: PrismaClient
 
   constructor() {
-    this.prisma = new PrismaClient()
+    this.prisma = prismaClient
   }
 
   async create(data: ProductCategoryData) {

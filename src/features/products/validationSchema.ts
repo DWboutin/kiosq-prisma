@@ -25,6 +25,7 @@ export const sizesAndPricesSchema = z
   .min(1)
 
 const productSchema = z.object({
+  name: z.optional(z.string().min(2, 'Minimum 2 characters').max(128, 'Maximum 128 characters')),
   categoryId: z
     .number({
       required_error: 'Please select a category',

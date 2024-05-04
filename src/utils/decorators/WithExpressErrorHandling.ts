@@ -9,6 +9,7 @@ export function WithExpressErrorHandling(
     try {
       await originalMethod.apply(this, args)
     } catch (error) {
+      console.log(error)
       const next = args[args.length - 1]
       if (typeof next === 'function') {
         next(error)
