@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   name      String
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Product   Product[]
 }
 
 model Product {
@@ -29,6 +30,8 @@ model Product {
   startMonth       Int
   endPeriod        String
   endMonth         Int
+  author           User               @relation(fields: [authorId], references: [id])
+  authorId         String
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   productSizePrice ProductSizePrice[]

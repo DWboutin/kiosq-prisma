@@ -3,9 +3,11 @@ import { WithExpressErrorHandling } from '/utils/decorators/WithExpressErrorHand
 import { ProductSizesPricesRepository } from '/features/productSizesPrices/Repository'
 import { ZodValidator } from '/utils/ZodValidator'
 import { productSizesPricesCreationSchema } from '/features/productSizesPrices/validationSchema'
+import { CheckIfUserOwnsProduct } from '/features/products/decorators'
 
 export class ProductSizesPricesController {
   @WithExpressErrorHandling
+  @CheckIfUserOwnsProduct
   static async create(req: Request, res: Response) {
     const productId = parseInt(req.params.productId)
 
@@ -37,6 +39,7 @@ export class ProductSizesPricesController {
   }
 
   @WithExpressErrorHandling
+  @CheckIfUserOwnsProduct
   static async update(req: Request, res: Response) {
     const productId = parseInt(req.params.productId)
     const sizeId = parseInt(req.params.sizeId)
@@ -55,6 +58,7 @@ export class ProductSizesPricesController {
   }
 
   @WithExpressErrorHandling
+  @CheckIfUserOwnsProduct
   static async delete(req: Request, res: Response) {
     const productId = parseInt(req.params.productId)
     const sizeId = parseInt(req.params.sizeId)
