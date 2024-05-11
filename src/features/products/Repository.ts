@@ -21,6 +21,7 @@ export class ProductsRepository implements IRepository {
         startMonth: data.startMonth,
         endPeriod: data.endPeriod,
         endMonth: data.endMonth,
+        authorId: data.authorId,
       },
       include: {
         productSizePrice: true,
@@ -40,6 +41,18 @@ export class ProductsRepository implements IRepository {
     return await this.prisma.product.findUnique({
       where: {
         id,
+      },
+      include: {
+        productSizePrice: true,
+      },
+    })
+  }
+
+  async findByIdAndAuthorId(id: number, authorId: string) {
+    return await this.prisma.product.findUnique({
+      where: {
+        id,
+        authorId,
       },
       include: {
         productSizePrice: true,

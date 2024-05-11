@@ -4,6 +4,7 @@ import { ZodValidator } from '/utils/ZodValidator'
 import { productCreationSchema, productUpdateSchema } from '/features/products/validationSchema'
 import { ProductsRepository } from '/features/products/Repository'
 import { ProductSizesPricesRepository } from '/features/productSizesPrices/Repository'
+import { CheckIfUserOwnsProduct } from '/features/products/decorators'
 
 export class ProductsController {
   @WithExpressErrorHandling
@@ -11,6 +12,7 @@ export class ProductsController {
     const validator = new ZodValidator(productCreationSchema)
     validator.validate(req.body)
 
+    const authenticatedUser = req.user as User
     const {
       name,
       categoryId,
@@ -32,6 +34,7 @@ export class ProductsController {
       startMonth,
       endPeriod,
       endMonth,
+      authorId: authenticatedUser.id,
     })
     const productSizesPricesRepository = new ProductSizesPricesRepository()
     const productSizesPrices = await Promise.all(
@@ -82,6 +85,7 @@ export class ProductsController {
   }
 
   @WithExpressErrorHandling
+  @CheckIfUserOwnsProduct
   static async update(req: Request, res: Response) {
     const validator = new ZodValidator(productUpdateSchema)
     validator.validate(req.body)
@@ -101,6 +105,7 @@ export class ProductsController {
   }
 
   @WithExpressErrorHandling
+  @CheckIfUserOwnsProduct
   static async delete(req: Request, res: Response) {
     const productId = parseInt(req.params.id)
 

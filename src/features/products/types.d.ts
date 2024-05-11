@@ -9,6 +9,7 @@ type ProductData = {
   startMonth: number
   endPeriod: string
   endMonth: number
+  authorId: string
 }
 
 type ProductDataWithSizesAndPrices = Product & { sizesAndPrices: ProductSizePriceData[] }
