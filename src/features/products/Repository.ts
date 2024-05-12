@@ -60,6 +60,17 @@ export class ProductsRepository implements IRepository {
     })
   }
 
+  async findAllByAuthorId(authorId: string) {
+    return await this.prisma.product.findMany({
+      where: {
+        authorId,
+      },
+      include: {
+        productSizePrice: true,
+      },
+    })
+  }
+
   async update(id: number, data: ProductData) {
     return await this.prisma.product.update({
       where: {

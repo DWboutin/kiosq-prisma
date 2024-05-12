@@ -11,6 +11,7 @@ productsRoutes.post(
   ProductsController.create,
 )
 productsRoutes.get('/', ProductsController.findAll)
+productsRoutes.get('/profile/:id', ProductsController.findAllForAuhtorId)
 productsRoutes.get('/:id', ProductsController.findById)
 productsRoutes.put(
   '/:id',
