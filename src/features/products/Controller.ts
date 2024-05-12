@@ -116,4 +116,16 @@ export class ProductsController {
 
     return
   }
+
+  @WithExpressErrorHandling
+  static async findAllForAuhtorId(req: Request, res: Response) {
+    const authorId = req.params.id
+
+    const productsRepository = new ProductsRepository()
+    const products = await productsRepository.findAllByAuthorId(authorId)
+
+    res.status(200).json({ products })
+
+    return
+  }
 }
