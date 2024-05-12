@@ -67,6 +67,9 @@ export class ProductsRepository implements IRepository {
       },
       include: {
         productSizePrice: true,
+        category: true,
+        type: true,
+        variety: true,
       },
     })
   }
