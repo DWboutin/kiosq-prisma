@@ -10,7 +10,7 @@ export function CheckIfUserOwnsProduct(
   descriptor.value = async function (...args: any[]) {
     const req = args[0]
     const res = args[1]
-    const productId = parseInt(req.params.productId)
+    const productId = parseInt(req.params.id)
 
     const authenticatedUser = req.user as User
 
