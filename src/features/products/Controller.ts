@@ -90,14 +90,27 @@ export class ProductsController {
     const validator = new ZodValidator(productUpdateSchema)
     validator.validate(req.body)
 
-    if (req.body.sizesAndPrices) {
-      delete req.body.sizesAndPrices
-    }
+    const infoToUpdate = { ...req.body, sizesAndPrices: undefined }
+    const sizesAndPrices = req.body.sizesAndPrices
 
     const productId = parseInt(req.params.id)
 
     const productsRepository = new ProductsRepository()
-    const product = await productsRepository.update(productId, req.body)
+    const productSizesPricesRepository = new ProductSizesPricesRepository()
+
+    await Promise.all([
+      await productsRepository.update(productId, infoToUpdate),
+      await Promise.all(
+        sizesAndPrices.map((sizesAndPrice: ProductSizePriceData) =>
+          productSizesPricesRepository.update({
+            ...sizesAndPrice,
+            productId,
+          }),
+        ),
+      ),
+    ])
+
+    const product = await productsRepository.findById(productId)
 
     res.status(200).json({ product })
 
